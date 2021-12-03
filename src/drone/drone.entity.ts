@@ -1,4 +1,12 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Medication } from '../medication/medication.entity';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 export enum droneModel {
   LIGHT = 'Lightweight',
@@ -40,4 +48,8 @@ export class Drone extends BaseEntity {
 
   @Column({ type: 'enum', enum: droneStatus, default: 'IDLE', nullable: false })
   state: droneStatus;
+
+  @ManyToMany(() => Medication)
+  @JoinTable()
+  medications: Medication[];
 }
