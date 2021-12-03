@@ -9,7 +9,8 @@ import { fromCommonToFindQuery } from 'src/utils/fromCommonToFindQuery';
 import { DeleteResult, UpdateResult } from 'typeorm';
 import { Drone } from './drone.entity';
 import { DroneRepository } from './drone.repository';
-import { FindDroneDto } from './dto/find.drone.dto';
+import { CreateDroneDto } from './dto/create-drone.dto';
+import { FindDroneDto } from './dto/find-drone.dto';
 
 @Injectable()
 export class DroneService {
@@ -33,7 +34,7 @@ export class DroneService {
     return drones as FindDroneDto[];
   }
 
-  async create(body: Drone): Promise<Drone> {
+  async create(body: CreateDroneDto): Promise<Drone> {
     const newDrone = await this._droneRepository.save(body);
     return newDrone;
   }

@@ -1,12 +1,4 @@
-import { Drone } from '../drone/drone.entity';
-import {
-  BaseEntity,
-  Column,
-  Entity,
-  JoinTable,
-  ManyToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('medications')
 export class Medication extends BaseEntity {
