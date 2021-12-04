@@ -7,6 +7,7 @@ import {
   Max,
   IsNumber,
 } from 'class-validator';
+import { Medication } from 'src/medication/medication.entity';
 import { droneModel, droneStatus } from '../drone.entity';
 
 export class FindDroneDto {
@@ -32,4 +33,6 @@ export class FindDroneDto {
 
   @IsEnum(droneStatus)
   state: droneStatus;
+
+  medications: Medication[];
 }

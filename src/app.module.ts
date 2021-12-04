@@ -1,3 +1,4 @@
+import { TaskModule } from './task/task.module';
 import { MedicationModule } from './medication/medication.module';
 import { DroneModule } from './drone/drone.module';
 import { ConfigService } from '../config/config.service';
@@ -5,9 +6,17 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '../config/config.module';
 import { Configuration } from '../config/config.keys';
 import { DatabaseModule } from '../database/database.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
-  imports: [MedicationModule, DroneModule, ConfigModule, DatabaseModule],
+  imports: [
+    TaskModule,
+    ScheduleModule.forRoot(),
+    MedicationModule,
+    DroneModule,
+    ConfigModule,
+    DatabaseModule,
+  ],
   controllers: [],
   providers: [],
 })

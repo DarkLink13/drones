@@ -1,44 +1,32 @@
 import {
   Body,
   Controller,
-  Get,
-  NotFoundException,
-  Param,
   Post,
-  Req,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
-import { Request } from 'express';
-import ICommonQuery from 'src/types/common.query.interface';
-import { Medication } from './medication.entity';
 import { MedicationService } from './medication.service';
 import { CreateMedicationDto } from './dto/create-medication.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
 
 @Controller('medication')
 export class MedicationController {
   constructor(private readonly medicationService: MedicationService) {}
 
   @Post()
-  async create(@Body() createMedicationDto: CreateMedicationDto) {
+  @UseInterceptors(
+    FileInterceptor('image', {
+      storage: diskStorage({
+        destination: './uploads/',
+      }),
+    }),
+  )
+  async create(
+    @UploadedFile() image: Express.Multer.File,
+    @Body() createMedicationDto: CreateMedicationDto,
+  ) {
+    (createMedicationDto as any).image = image.path;
     return this.medicationService.create(createMedicationDto);
-  }
-
-  @Get()
-  async findAll(@Req() req: Request) {
-    const response = this.medicationService.getAll(
-      req.query as ICommonQuery<Medication>,
-    );
-    if (!response) {
-      throw new NotFoundException('Not found');
-    }
-    return response;
-  }
-
-  @Get(':id')
-  async findOne(@Param('id') id: number) {
-    const response = this.medicationService.getById(id);
-    if (!response) {
-      throw new NotFoundException(`Not found: ${id}`);
-    }
-    return response;
   }
 }

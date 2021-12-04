@@ -5,9 +5,7 @@ import {
   NotFoundException,
   Param,
   Post,
-  Req,
 } from '@nestjs/common';
-import { Request } from 'express';
 import ICommonQuery from 'src/types/common.query.interface';
 import { MoreThan, Not } from 'typeorm';
 import { Drone } from './drone.entity';
@@ -40,21 +38,15 @@ export class DroneController {
     return response;
   }
 
-  @Get()
-  async findAll(@Req() req: Request) {
-    const response = this.droneService.getAll(req.query as ICommonQuery<Drone>);
-    if (!response) {
-      throw new NotFoundException('Not found');
-    }
-    return response;
-  }
-
-  @Get(':id')
-  async findOne(@Param('id') id: number) {
-    const response = this.droneService.getById(id);
+  @Get(':id/:item')
+  async findBattery(@Param('id') id: number, @Param('item') item: string) {
+    if (!['batteryCapacity', 'medications'].includes(item))
+      throw new NotFoundException('Not a valid URL');
+    const response = await this.droneService.getById(id);
     if (!response) {
       throw new NotFoundException(`Not found: ${id}`);
     }
-    return response;
+    const results = response[item];
+    return { [item]: results };
   }
 }

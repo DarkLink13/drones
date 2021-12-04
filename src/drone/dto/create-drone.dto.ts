@@ -1,13 +1,28 @@
 import {
   IsNumber,
-  IsNotEmpty,
   IsString,
   Length,
   IsEnum,
   Max,
   Min,
+  Validate,
+  ValidatorConstraint,
+  ValidatorConstraintInterface,
+  ValidationArguments,
 } from 'class-validator';
-import { droneModel, droneStatus } from '../drone.entity';
+
+import { Drone, droneModel, droneStatus } from '../drone.entity';
+
+@ValidatorConstraint({ name: 'lowLevelBattery', async: false })
+export class LowLevelBattery implements ValidatorConstraintInterface {
+  validate(text: string, args: ValidationArguments) {
+    return !(text === 'LOADING' && (<Drone>args.object).batteryCapacity < 25);
+  }
+
+  defaultMessage() {
+    return 'The drone has been set state "LOADING" and the battery is below 25%';
+  }
+}
 
 export class CreateDroneDto {
   @IsString()
@@ -28,5 +43,6 @@ export class CreateDroneDto {
   batteryCapacity: number;
 
   @IsEnum(droneStatus)
+  @Validate(LowLevelBattery)
   state: droneStatus;
 }
