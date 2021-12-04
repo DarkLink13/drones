@@ -17,7 +17,7 @@ export const databaseProvider = [
         password: config.get(Configuration.DB_PASS),
         synchronize: true,
         entities: [__dirname + '/../**/*.entity{.ts,.js}'],
-        migrations: [__dirname + 'migrations/*{.ts,.js}'],
+        migrations: [__dirname + '/migrations/*{.ts,.js}'],
         cli: {
           migrationsDir: 'migrations',
         },

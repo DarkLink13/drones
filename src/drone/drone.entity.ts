@@ -49,7 +49,10 @@ export class Drone extends BaseEntity {
   @Column({ type: 'enum', enum: droneStatus, default: 'IDLE', nullable: false })
   state: droneStatus;
 
-  @ManyToMany(() => Medication)
+  @ManyToMany(() => Medication, (medication) => medication.drones, {
+    cascade: true,
+    eager: true,
+  })
   @JoinTable()
   medications: Medication[];
 }

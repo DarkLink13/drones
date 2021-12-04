@@ -1,4 +1,11 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Drone } from 'src/drone/drone.entity';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity('medications')
 export class Medication extends BaseEntity {
@@ -16,4 +23,7 @@ export class Medication extends BaseEntity {
 
   @Column()
   image: string;
+
+  @ManyToMany(() => Drone, (drone) => drone.medications)
+  drones: Drone[];
 }

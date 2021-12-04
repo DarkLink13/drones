@@ -9,9 +9,11 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 import ICommonQuery from 'src/types/common.query.interface';
+import { MoreThan, Not } from 'typeorm';
 import { Drone } from './drone.entity';
 import { DroneService } from './drone.service';
 import { CreateDroneDto } from './dto/create-drone.dto';
+import { LoadDroneDto } from './dto/load-drone.dto';
 
 @Controller('drone')
 export class DroneController {
@@ -20,6 +22,22 @@ export class DroneController {
   @Post()
   async create(@Body() createDroneDto: CreateDroneDto) {
     return this.droneService.create(createDroneDto);
+  }
+
+  @Post('load')
+  async load(@Body() loadDroneDto: LoadDroneDto) {
+    return this.droneService.load(loadDroneDto);
+  }
+
+  @Get('available')
+  async findLoaded() {
+    const response = this.droneService.getAll({
+      where: { batteryCapacity: MoreThan(25), state: Not('LOADING') },
+    } as ICommonQuery<Drone>);
+    if (!response) {
+      throw new NotFoundException('Not available');
+    }
+    return response;
   }
 
   @Get()

@@ -1,3 +1,4 @@
+import { MedicationModule } from './medication/medication.module';
 import { DroneModule } from './drone/drone.module';
 import { ConfigService } from '../config/config.service';
 import { Module } from '@nestjs/common';
@@ -6,7 +7,7 @@ import { Configuration } from '../config/config.keys';
 import { DatabaseModule } from '../database/database.module';
 
 @Module({
-  imports: [DroneModule, ConfigModule, DatabaseModule],
+  imports: [MedicationModule, DroneModule, ConfigModule, DatabaseModule],
   controllers: [],
   providers: [],
 })
